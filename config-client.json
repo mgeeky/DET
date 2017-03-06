@@ -1,0 +1,48 @@
+{
+    "plugins": {
+        "http": {
+            "target": "127.0.0.1",
+            "port": 8085
+        },
+        "google_docs": {
+            "target": "conchwaiter.uk.plak.cc",
+            "port": 8080
+        },        
+        "dns": {
+            "key": "google.com",
+            "target": "127.0.0.1",
+            "port": 53
+        },
+        "gmail": {
+            "username": "dataexfil@gmail.com",
+            "password": "CrazyNicePassword",
+            "server": "smtp.gmail.com",
+            "port": 587
+        },
+        "tcp": {
+            "target": "127.0.0.1",
+            "port": 6969
+        },
+        "udp": {
+            "target": "127.0.0.1",
+            "port": 6969
+        },
+        "twitter": {
+            "username": "PaulWebSec",
+            "CONSUMER_TOKEN": "XXXXXXXXXXX",
+            "CONSUMER_SECRET": "XXXXXXXXXXX",
+            "ACCESS_TOKEN": "XXXXXXXXXXX",
+            "ACCESS_TOKEN_SECRET": "XXXXXXXXXXX"
+        },
+        "icmp": {
+            "target": "192.168.0.12"
+        }
+    },
+	"IPEK": "3515206de84e7d424eef20add945abd6",
+	"KSN": "3e10f3dc6a3291600000", 
+    "max_time_sleep": 10,
+    "min_time_sleep": 1,
+    "max_bytes_read": 400,
+    "min_bytes_read": 300,
+	"compression": 1
+}
