@@ -174,6 +174,7 @@ So far, DET supports multiple protocols, listed here:
 - [X] SMTP/IMAP (eg. Gmail)
 - [X] Raw TCP
 - [X] PowerShell implementation (HTTP, DNS, ICMP, SMTP (used with Gmail))
+- [X] Derived Unique Key Per Transaction (DUKPT) key management
 
 And other "services": 
 
