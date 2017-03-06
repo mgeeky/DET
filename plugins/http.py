@@ -53,7 +53,7 @@ def listen():
         httpd.serve_forever()
     except:
         app_exfiltrate.log_message(
-            'warning', "[http] Couldn't bind http daemon on port {}".format(port))
+            'warning', "[http] Couldn't bind http daemon on port {}".format(config['port']))
 
 
 class Plugin:
