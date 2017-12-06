@@ -6,3 +6,4 @@ slackclient
 dpkt>=1.9.1
 pyftpdlib
 email
+scapy
