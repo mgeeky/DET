@@ -8,7 +8,7 @@
         "google_docs": {
             "target": "SERVER",
             "port": 8080
-        },        
+        },
         "dns": {
             "key": "google.com",
             "target": "192.168.0.12",
@@ -61,6 +61,13 @@
             "target": "192.168.0.12",
             "port": 5060,
             "proxies": ["192.168.0.13", "192.168.0.14"]
+        },
+        "wifi": {
+            "interface": "wlan0mon"
+        },
+        "github_gist": {
+            "username": "email@gmail.com",
+            "password": "XXXXXXXXXXXXXXXXXXXXXXXXX"
         }
     },
     "AES_KEY": "THISISACRAZYKEY",
