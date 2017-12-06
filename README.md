@@ -1,4 +1,6 @@
-[![Black Hat Arsenal](https://www.toolswatch.org/badges/arsenal/2016.svg)](https://www.blackhat.com/us-16/arsenal.html#det)
+[![Black Hat Arsenal USA 2016](https://www.toolswatch.org/badges/arsenal/2016.svg)](https://www.blackhat.com/us-16/arsenal.html#det)
+
+[![Black Hat Arsenal EU 2017](https://rawgit.com/toolswatch/badges/master/arsenal/2017.svg)](https://www.blackhat.com/eu-17/arsenal/schedule/#det-data-exfiltration-toolkit-8717)
 
 DET (extensible) Data Exfiltration Toolkit
 =======
