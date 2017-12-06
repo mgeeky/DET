@@ -3,13 +3,9 @@
 DET (extensible) Data Exfiltration Toolkit
 =======
 
-DET (is provided AS IS), is a proof of concept to perform Data Exfiltration using either single or multiple channel(s) at the same time.  
-
-**This is a Proof of Concept aimed at identifying possible DLP failures. This should never be used to exfiltrate sensitive/live data (say on an assessment)**
+DET (is provided AS IS), is a proof of concept to perform Data Exfiltration using either single or multiple channel(s) at the same time.
 
 The idea was to create a generic toolkit to plug any kind of protocol/service to test implmented Network Monitoring and Data Leakage Prevention (DLP) solutions configuration, against different data exfiltration techniques.
-
-The primary repository has now moved to [here](https://github.com/PaulSec/DET).
 
 # Slides
 
@@ -43,7 +39,7 @@ Slides are available [here](https://docs.google.com/presentation/d/11uk6d-xougn3
 Clone the repo: 
 
 ```bash
-git clone https://github.com/sensepost/DET.git
+git clone https://github.com/PaulSec/DET.git
 ```
 
 Then: 
@@ -119,7 +115,7 @@ python det.py -h
 usage: det.py [-h] [-c CONFIG] [-f FILE] [-d FOLDER] [-p PLUGIN] [-e EXCLUDE]
               [-L | -Z]
 
-Data Exfiltration Toolkit (SensePost)
+Data Exfiltration Toolkit (@PaulWebSec)
 
 optional arguments:
   -h, --help  show this help message and exit
@@ -301,5 +297,4 @@ Feel free if you want to contribute, clone, fork, submit your PR and so on.
 
 # License
 
-DET is licensed under a [MIT License](https://opensource.org/licenses/MIT). 
-Permissions beyond the scope of this license may be available at [info@sensepost.com](info@sensepost.com)
+DET is licensed under a [MIT License](https://opensource.org/licenses/MIT).

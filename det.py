@@ -326,7 +326,7 @@ def main():
     global threads, config
 
     parser = argparse.ArgumentParser(
-        description='Data Exfiltration Toolkit (SensePost)')
+        description='Data Exfiltration Toolkit (@PaulWebSec)')
     parser.add_argument('-c', action="store", dest="config", default=None,
                         help="Configuration file (eg. '-c ./config-sample.json')")
     parser.add_argument('-f', action="append", dest="file",
