@@ -1,3 +1,4 @@
+from __future__ import print_function
 import smtpd
 import asyncore
 import email
@@ -20,8 +21,8 @@ class CustomSMTPServer(smtpd.SMTPServer):
                 "from {}".format(peer))
         try:
             self.handler(body)
-        except Exception, e:
-            print e
+        except Exception as e:
+            print(e)
             pass
 
 def send(data):

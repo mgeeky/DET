@@ -1,3 +1,4 @@
+from __future__ import print_function
 import base64
 import imaplib
 from smtplib import SMTP
@@ -56,11 +57,11 @@ def listen():
                 if part.get_content_type() == "text/plain":  # ignore attachments/html
                     body = part.get_payload(decode=True)
                     data = body.split('\r\n')[0]
-                    # print data
+                    # print(data)
                     try:
                         app_exfiltrate.retrieve_data(base64.b64decode(data))
-                    except Exception, e:
-                        print e
+                    except Exception as e:
+                        print(e)
                 else:
                     continue
         time.sleep(2)

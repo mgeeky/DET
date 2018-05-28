@@ -39,7 +39,7 @@ def sniff(handler):
         app_exfiltrate.log_message(
             'info', "[tcp_ipv6] Starting server on port {}...".format(port))
         # sock.listen(1)
-    except Exception, e:
+    except Exception as e:
         app_exfiltrate.log_message(
             'warning', "[tcp_ipv6] Couldn't bind on port {}...".format(port))
         sys.exit(-1)
@@ -52,7 +52,7 @@ def sniff(handler):
         try:
             app_exfiltrate.log_message('info', "[tcp_ipv6] Received {} bytes".format(len(data)))
             handler(data.decode('hex'))
-        except Exception, e:
+        except Exception as e:
             pass
     sock.close()
 

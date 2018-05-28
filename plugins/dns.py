@@ -1,3 +1,4 @@
+from __future__ import print_function
 from dnslib import DNSRecord
 import socket
 from dpkt import dns
@@ -27,8 +28,8 @@ def handle_dns_query(qname):
             if (len(qname) < max_query):
                 app_exfiltrate.retrieve_data(''.join(buf[jobid]).decode('hex'))
                 buf[jobid] = []
-    except Exception, e:
-        # print e
+    except Exception as e:
+        # print(e)
         pass
 
 def relay_dns_query(domain):
