@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import random
 import threading
@@ -15,7 +16,11 @@ from os import listdir
 from os.path import isfile, join
 from Crypto.Cipher import AES
 from zlib import compress, decompress
-from cStringIO import StringIO
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 if getattr(sys, 'frozen', False):
     os.chdir(sys._MEIPASS)
@@ -43,7 +48,7 @@ class bcolors:
 
 
 def display_message(message):
-    print "[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message)
+    print("[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message))
 
 
 def warning(message):
@@ -345,7 +350,7 @@ def main():
     results = parser.parse_args()
 
     if (results.config is None):
-        print "Specify a configuration file!"
+        print("Specify a configuration file!")
         parser.print_help()
         sys.exit(-1)
 
