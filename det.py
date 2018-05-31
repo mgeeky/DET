@@ -205,15 +205,18 @@ class Exfiltration(object):
         content = aes_decrypt(content, self.KEY)
         if COMPRESSION:
             content = decompress(content)
-        f = open(filename, 'w')
-        f.write(content)
-        f.close()
+        try:
+            with open(filename, 'w') as f:
+                f.write(content)
+        except IOError as e:
+            warning("Got %s: cannot save file %s" % filename)
+            raise e
 
-        with open(filename) as f:
-            if (files[jobid]['checksum'] == md5(f):
-                ok("File %s recovered" % fname)
-            else:
-                warning("File %s corrupt!" % fname)
+        if (files[jobid]['checksum'] == md5(open(filename))):
+            ok("File %s recovered" % (fname))
+        else:
+            warning("File %s corrupt!" % (fname))
+
         del files[jobid]
 
     def retrieve_data(self, data):
