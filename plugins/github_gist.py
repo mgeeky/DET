@@ -27,7 +27,7 @@ def listen():
                     app_exfiltrate.log_message('info', "[github] Receiving {} bytes within Gist".format(len(content)))
                     app_exfiltrate.retrieve_data(content)
                 except Exception, err:
-                    # print err
+                    # print(err)
                     pass
                 finally:
                     gist.delete()

