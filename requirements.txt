@@ -3,6 +3,7 @@ pysocks
 dnslib
 pycrypto
 slackclient
+bitstring
 dpkt>=1.9.1
 pyftpdlib
 email==6.0.0.a1
