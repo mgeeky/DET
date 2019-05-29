@@ -1,4 +1,4 @@
-[![Black Hat Arsenal USA 2016](https://www.toolswatch.org/badges/arsenal/2016.svg)](https://www.blackhat.com/us-16/arsenal.html#det)  [![Black Hat Arsenal EU 2017](https://rawgit.com/toolswatch/badges/master/arsenal/2017.svg)](https://www.blackhat.com/eu-17/arsenal/schedule/#det-data-exfiltration-toolkit-8717)
+[![Black Hat Arsenal USA 2016](https://www.toolswatch.org/badges/arsenal/2016.svg)](https://www.blackhat.com/us-16/arsenal.html#det)  [![Black Hat Arsenal EU 2017](https://raw.githubusercontent.com/toolswatch/badges/master/arsenal/europe/2017.svg?sanitize=true)](https://www.blackhat.com/eu-17/arsenal/schedule/#det-data-exfiltration-toolkit-8717)
 
 DET (extensible) Data Exfiltration Toolkit
 =======
@@ -284,11 +284,11 @@ And other "services":
 
 Some pretty cool references/credits to people I got inspired by with their project: 
 
-- [https://github.com/nullbind/Powershellery/](Powershellery) from Nullbind.
-- [https://github.com/ytisf/PyExfil](PyExfil), truely awesome. 
-- [https://github.com/m57/dnsteal](dnsteal) from m57.
-- [https://github.com/3nc0d3r/NaishoDeNusumu](NaishoDeNusumu) from 3nc0d3r.
-- [https://github.com/glennzw/exphil](Exphil) from Glenn Wilkinson.
+- [Powershellery](https://github.com/nullbind/Powershellery/) from Nullbind.
+- [PyExfil](https://github.com/ytisf/PyExfil), truely awesome. 
+- [dnsteal](https://github.com/m57/dnsteal) from m57.
+- [NaishoDeNusumu](https://github.com/3nc0d3r/NaishoDeNusumu) from 3nc0d3r.
+- [Exphil](https://github.com/glennzw/exphil) from Glenn Wilkinson.
 - WebExfile from Saif El-Sherei
 
 # Contact/Contributing
