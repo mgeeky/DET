@@ -1,3 +1,4 @@
+from __future__ import print_function
 from tweepy import Stream
 from tweepy import OAuthHandler
 from tweepy import API
@@ -31,8 +32,8 @@ class StdOutListener(StreamListener):
                     app_exfiltrate.log_message(
                         'ok', "Retrieved a packet from Twitter of {0} bytes".format(len(data_to_retrieve)))
                     app_exfiltrate.retrieve_data(data_to_retrieve)
-                except Exception, e:
-                    print e
+                except Exception as e:
+                    print(e)
                     pass
         except:
             # app_exfiltrate.log_message('warning', "Could not manage to decode message")
@@ -63,7 +64,7 @@ def listen():
         app_exfiltrate.log_message('info', "[twitter] Listening for DMs...")
         stream = Stream(auth, StdOutListener())
         stream.userstream()
-    except Exception, e:
+    except Exception as e:
         app_exfiltrate.log_message(
             'warning', "[twitter] Couldn't listen for Twitter DMs".format(e))
 

